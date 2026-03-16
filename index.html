@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Embed Viewer</title>
+    <style>
+        /* CSS Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            margin-top: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #ff0000; /* YouTube Red */
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            resize: vertical;
+            margin-bottom: 15px;
+            font-family: monospace;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        button:hover {
+            background-color: #cc0000;
+        }
+
+        /* --- The Magic for Mobile Responsive Videos --- */
+        .video-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* Forces the standard video shape */
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none; /* Hidden until a video is added */
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .video-wrapper.active {
+            display: block;
+        }
+
+        /* This forces the iframe to fill the wrapper, ignoring its own width/height */
+        .video-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .app-container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <h1>YouTube Embed Viewer</h1>
+        <p>Copy the <strong>&lt;iframe&gt;</strong> code from a YouTube video and paste it below.</p>
+        
+        <textarea id="embedInput" placeholder='<iframe width="560" height="315" src="https://www.youtube.com/embed/..." title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'></textarea>
+        
+        <button id="showBtn">Load Video</button>
+
+        <div id="videoContainer" class="video-wrapper">
+            </div>
+    </div>
+
+    <script>
+        // JavaScript Logic
+        const btn = document.getElementById('showBtn');
+        const input = document.getElementById('embedInput');
+        const container = document.getElementById('videoContainer');
+
+        btn.addEventListener('click', function() {
+            const code = input.value.trim();
+
+            // Simple validation to ensure the user pasted an actual iframe
+            if(code.toLowerCase().includes('<iframe') && code.toLowerCase().includes('</iframe>')) {
+                container.innerHTML = code;
+                container.classList.add('active'); // Makes the black box visible
+            } else {
+                alert('Oops! That doesn\'t look like a valid YouTube embed code. Please make sure it includes the <iframe ...> tags.');
+                container.classList.remove('active');
+                container.innerHTML = '';
+            }
+        });
+    </script>
+
+</body>
+</html>
